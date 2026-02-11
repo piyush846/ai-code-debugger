@@ -41,6 +41,29 @@ def  read_code(args):
     
         
 
+def build_prompt(code: str, language: str, error_type: str)-> str :
+     template = Path("prompts/debugger.txt").read_text(encoding="utf-8")
+     structured_context = f"""
+     Detected Language: {language}
+     Pre-analysis Result: {error_type}
+
+     CODE:
+     {code}
+     """
+     return template.replace("{code}", structured_context)
+
+
+def call_ai(prompt: str)-> str:
+     result = subprocess.run(
+          ["ollama", "run", "deepseek-coder:1.3b"],  
+
+          input=prompt,
+          text= True, #Without this, Python would return raw byte data.
+          capture_output=True
+          
+     )
+     return result.stdout.strip() 
+'''strip() removes extra: Spaces New lines It ccleans the output before returning '''
     
 '''Your code builds a:p
 
@@ -74,4 +97,27 @@ If stdin → read from stdin
 Else if file → check file exists → read file
 Else → show error and exit
 Decides where the code comes from, reads it safely, and returns it.
+
+build prompt:
+this function build a very  structured analysis
+Detected Language: Python
+Pre-analysis Result: Possible Python syntax error
+
+CODE:
+def add(a,b)
+    return a+b
+    
+    Simple Summary of call_ai()
+
+This function:
+
+Takes prompt
+   ↓
+Runs Ollama
+   ↓
+Sends prompt to model
+   ↓
+Receives AI answer
+   ↓
+Returns cleaned result
 '''
