@@ -7,10 +7,14 @@ from agent.language_detector import detect_language # for early language detecti
 from agent.error_classifier import classify_error #for the early error classficattiono
 from agent.extractor import extract_fixed_code
 from agent.retry import retry_fix
+
+
 def get_arguments():
     parser =argparse.ArgumentParser(
         description="AI Code Debugger(Free,Local)"
     )
+
+    
     parser.add_argument(
         "file",
         nargs="?",
@@ -61,7 +65,7 @@ def build_prompt(code: str, language: str, error_type: str)-> str :
 
 def call_ai(prompt: str)-> str:
      result = subprocess.run(
-          ["ollama", "run", "deepseek-coder:6.7b"],  
+          [r"C:\Users\91968\AppData\Local\Programs\Ollama\ollama.exe", "run", "deepseek-coder:6.7b"],  
 
           input=prompt,
           text= True, #Without this, Python would return raw byte data.
