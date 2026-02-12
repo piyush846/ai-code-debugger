@@ -71,21 +71,31 @@ def call_ai(prompt: str)-> str:
      return result.stdout.strip() 
 
 def extract_fixed_code(ai_output: str)->str|None:
-     '''Extract the fixed code section from AI output'''
+     '''Extract the fixed code section from AI output
+     works with markdown adn plain text'''
     
      if "FIXED CODE:" not in ai_output:
           return None
-     parts = ai_output.split("FIXED CODE:")
+     fixed_section = ai_output.split("FIXED CODE:",1)[1]
+     fixed_section = str(fixed_section)
 
-     if len(parts)<2:
-          return None
+
+     if "```"in fixed_section:
+          parts = fixed_section.split("```")
+          if len(parts)>=2:
+               fixed_section=parts[1]
+
+               lines = fixed_section.splitlines()
+               if len(lines)>0 and lines[0].lower().strip() =="python":
+                    fixed_section="\n".join(lines[1:])
+              
+     fixed_section = fixed_section.strip()
+
+     return fixed_section if fixed_section else None
+
      
-     fixed_section =parts[1].strip()#This takes only the fixed code section.
-     if fixed_section.startswith("```"):  #Markdown markers:
-          fixed_section=fixed_section.split("```",1)[1] #This removes the first markdown marker.
-          fixed_section=fixed_section.split("```",1)[0] #This removes the last markdown marker.after this we will only have the clean code
-          return fixed_section.strip() #This is the final code which is going to be written on the file by agent
-          
+     
+     
 def apply_fix(file_path: str, fixed_code: str):
      '''
      Docstring for apply_fix\
@@ -105,6 +115,9 @@ def apply_fix(file_path: str, fixed_code: str):
      print(f"Fix applied successfully")
 
      print(f"Backup created at :{backup}") # thsi shows backup file location
+
+
+
 def main():
      args=get_arguments()
      code = read_code(args)
@@ -120,6 +133,17 @@ def main():
 
      print("Result:\n")
      print(output)
+
+     if args.fix and args.file:
+          print("\n Applying fix in safe mode...")
+
+          fixed_code = extract_fixed_code(output)
+
+          if fixed_code:
+               
+               apply_fix(args.file, fixed_code)
+          else:
+               print("Could not extract fixed code from AI response.")
 
 if __name__=="__main__":
      main()
