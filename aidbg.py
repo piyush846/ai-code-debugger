@@ -55,13 +55,14 @@ def build_prompt(code: str, language: str, error_type: str)-> str :
 
 def call_ai(prompt: str)-> str:
      result = subprocess.run(
-          ["ollama", "run", "deepseek-coder:1.3b"],  
+          ["ollama", "run", "deepseek-coder:6.7b"],  
 
           input=prompt,
           text= True, #Without this, Python would return raw byte data.
-          capture_output=True
-          
-     )
+          capture_output=True,
+          encoding="utf-8" #Decode output using UTF-8 without this system will suffer from a bug
+            )
+     
      return result.stdout.strip() 
 
 def main():
