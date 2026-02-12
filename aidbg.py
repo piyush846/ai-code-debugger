@@ -33,7 +33,7 @@ def  read_code(args):
 
         if not path.exists():
                
-               Print("File not Found")
+               print("File not Found")
                sys.exit(1) #  1 menas failur or error code
         return path.read_text(encoding ="utf-8")
     print ("provide a file or use --stdin")
@@ -63,6 +63,25 @@ def call_ai(prompt: str)-> str:
           
      )
      return result.stdout.strip() 
+
+def main():
+     args=get_arguments()
+     code = read_code(args)
+     language = detect_language(code, args.file)
+     error_type = classify_error(code)
+
+     print(f" Detected Language: {language}")
+     print(f"Pre-analysis:{error_type}")
+     print("Debuggin......\n")
+
+     prompt= build_prompt(code,language,error_type)
+     output= call_ai(prompt)
+
+     print("Result:\n")
+     print(output)
+
+if __name__=="__main__":
+     main()
 '''strip() removes extra: Spaces New lines It ccleans the output before returning '''
     
 '''Your code builds a:p
