@@ -2,7 +2,7 @@ import argparse #handle CLI argument
 import subprocess #talk to OLLama
 import sys #read stdin
 from pathlib import Path #Safe file handling
-
+from agent.validator import validate_python_syntax
 from agent.language_detector import detect_language # for early language detection
 from agent.error_classifier import classify_error #for the early error classficattiono
 
@@ -94,7 +94,7 @@ def extract_fixed_code(ai_output: str)->str|None:
      return fixed_section if fixed_section else None
 
      
-     
+
      
 def apply_fix(file_path: str, fixed_code: str):
      '''
@@ -139,15 +139,23 @@ def main():
 
           fixed_code = extract_fixed_code(output)
 
-          if fixed_code:
-               
-               apply_fix(args.file, fixed_code)
-          else:
+          if not fixed_code:
                print("Could not extract fixed code from AI response.")
+               return
+          
+          valid, error = validate_python_syntax(fixed_code,args.file) 
 
+          if not valid:
+               print(f"AI fix rejected due to syntax error:{error}")
+               print("Fix not applied for safety")
+               return
+          
+          apply_fix(args.file, fixed_code)
+          print("Syntax validation passed. Fix applied successfully")
 if __name__=="__main__":
      main()
 '''strip() removes extra: Spaces New lines It ccleans the output before returning '''
+
     
 '''Your code builds a:p
 
