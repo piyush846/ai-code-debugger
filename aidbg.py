@@ -93,7 +93,7 @@ def apply_fix(file_path: str, fixed_code: str):
 
      print(f"Fix applied successfully")
 
-     print(f"Backup created at :{backup}") # thsi shows backup file location
+     print(f"Backup created at :{backup}") # this shows backup file location
 
 
 
@@ -127,7 +127,7 @@ def main():
           if not fixed_code:
                print("Failed to generate valid after multiple attempts")
           apply_fix(args.file, fixed_code)
-          
+
           print("Syntax validation passed. Fix applied successfully")
 if __name__=="__main__":
      main()
