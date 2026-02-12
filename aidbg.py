@@ -5,7 +5,8 @@ from pathlib import Path #Safe file handling
 from agent.validator import validate_python_syntax
 from agent.language_detector import detect_language # for early language detection
 from agent.error_classifier import classify_error #for the early error classficattiono
-
+from agent.extractor import extract_fixed_code
+from agent.retry import retry_fix
 def get_arguments():
     parser =argparse.ArgumentParser(
         description="AI Code Debugger(Free,Local)"
@@ -70,28 +71,6 @@ def call_ai(prompt: str)-> str:
      
      return result.stdout.strip() 
 
-def extract_fixed_code(ai_output: str)->str|None:
-     '''Extract the fixed code section from AI output
-     works with markdown adn plain text'''
-    
-     if "FIXED CODE:" not in ai_output:
-          return None
-     fixed_section = ai_output.split("FIXED CODE:",1)[1]
-     fixed_section = str(fixed_section)
-
-
-     if "```"in fixed_section:
-          parts = fixed_section.split("```")
-          if len(parts)>=2:
-               fixed_section=parts[1]
-
-               lines = fixed_section.splitlines()
-               if len(lines)>0 and lines[0].lower().strip() =="python":
-                    fixed_section="\n".join(lines[1:])
-              
-     fixed_section = fixed_section.strip()
-
-     return fixed_section if fixed_section else None
 
      
 
@@ -137,20 +116,18 @@ def main():
      if args.fix and args.file:
           print("\n Applying fix in safe mode...")
 
-          fixed_code = extract_fixed_code(output)
-
+          fixed_code= retry_fix(call_ai,
+                                build_prompt,
+                                code,
+                                language,
+                                error_type,
+                                args.file,
+                                max_attempts=4
+                                )
           if not fixed_code:
-               print("Could not extract fixed code from AI response.")
-               return
-          
-          valid, error = validate_python_syntax(fixed_code,args.file) 
-
-          if not valid:
-               print(f"AI fix rejected due to syntax error:{error}")
-               print("Fix not applied for safety")
-               return
-          
+               print("Failed to generate valid after multiple attempts")
           apply_fix(args.file, fixed_code)
+          
           print("Syntax validation passed. Fix applied successfully")
 if __name__=="__main__":
      main()
