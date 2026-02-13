@@ -128,8 +128,9 @@ def main():
                                 args.file,
                                 max_attempts=4
                                 )
-          if not fixed_code:
+          if fixed_code is None:
                print("Failed to generate valid after multiple attempts")
+               return
           apply_fix(args.file, fixed_code)
 
           print("Syntax validation passed. Fix applied successfully")
