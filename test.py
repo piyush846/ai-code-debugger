@@ -1,10 +1,10 @@
-def main():
+def main():    # add colon here
     print("Starting program")
     
-    for i in range(5):
-        print(i)
+    for i in range(5):   # Add colon at end of loop declaration
+        print(i)         # Close parenthesis is missing here
         
-        if i==3:
-            print("Found 3")
+        if i==3:  # Add colon at start of condition statement
+            print("Found 3")  # Need to close the quote
             
     return "Done"

@@ -9,7 +9,8 @@ from agent.language_detector import detect_language # for early language detecti
 from agent.error_classifier import classify_error #for the early error classficattiono
 from agent.extractor import extract_fixed_code
 from agent.retry import retry_fix
-
+from agent.ai_client import call_ai
+from agent.fixer import apply_fix
 
 def get_arguments():
     parser =argparse.ArgumentParser(
@@ -63,75 +64,6 @@ def build_prompt(code: str, language: str, error_type: str)-> str :
      {code}
      """
      return template.replace("{code}", structured_context)
-
-
-def call_ai(prompt: str) -> str:
-    """
-    Call Ollama model safely using absolute path.
-    """
-
-    # HARD-SET absolute path (this is correct on your system)
-    ollama_path = r"C:\Users\91968\AppData\Local\Programs\Ollama\ollama.exe"
-
-    # Step 1: Verify executable exists
-    if not os.path.isfile(ollama_path):
-        print("CRITICAL ERROR: Ollama executable not found at:")
-        print(ollama_path)
-        return ""
-
-    try:
-
-        # Step 2: Run Ollama model
-        result = subprocess.run(
-            [ollama_path, "run", "deepseek-coder:6.7b"],
-            input=prompt,
-            text=True,
-            capture_output=True,
-            encoding="utf-8",
-            timeout=120
-        )
-
-        # Step 3: Debug info
-        print("DEBUG return code:", result.returncode)
-        print("DEBUG stderr:", result.stderr)
-
-        # Step 4: Check failure
-        if result.returncode != 0:
-            print("ERROR: Ollama execution failed")
-            return ""
-
-        # Step 5: Return clean output
-        return result.stdout.strip()
-
-    except Exception as e:
-        print("CRITICAL ERROR:", str(e))
-        return ""
-     
-
-
-     
-
-     
-def apply_fix(file_path: str, fixed_code: str):
-     '''
-     Docstring for apply_fix\
-     Safely apply fix:
-     create backup 
-     overwrite original file
-    
-     '''
-     original = Path(file_path) #Path object is safer than plain string.
-    
-     backup = original.with_suffix(original.suffix + ".bak") #test.py → test.py.bak Now backup file path is ready
-     
-     backup.write_text(original.read_text(encoding="utf-8"),encoding="utf-8") #This is very important | this creates backup file.
-
-     original.write_text(fixed_code, encoding="utf-8") #This overwrited original file with fixed code
-
-     print(f"Fix applied successfully")
-
-     print(f"Backup created at :{backup}") # this shows backup file location
-
 
 
 def main():
