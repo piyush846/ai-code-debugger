@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aidbg"
+version = "0.1.0"
+description = "AI Code Debugger using local LLM"
+authors = [
+    { name = "Piyush Maheshwari" }
+]
+requires-python = ">=3.10"
+
+[tool.setuptools]
+packages = ["agent"]
+py-modules = ["aidbg"]
+
+[project.scripts]
+aidbg = "aidbg:main"
