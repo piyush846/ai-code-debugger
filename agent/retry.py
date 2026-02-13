@@ -9,6 +9,9 @@ def retry_fix(call_ai, build_prompt, code, language,error_type,filename ,max_att
         prompt=build_prompt(code,language, error_type)
 
         output = call_ai(prompt)
+        print("\nDebug : RAW AI OUTPUT \n")
+        print( output)
+        print("\nDebug end\n")
 
         fixed_code= extract_fixed_code(output)
 

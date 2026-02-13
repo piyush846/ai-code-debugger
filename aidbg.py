@@ -1,6 +1,8 @@
 import argparse #handle CLI argument
 import subprocess #talk to OLLama
 import sys #read stdin
+import os
+import shutil
 from pathlib import Path #Safe file handling
 from agent.validator import validate_python_syntax
 from agent.language_detector import detect_language # for early language detection
@@ -63,17 +65,48 @@ def build_prompt(code: str, language: str, error_type: str)-> str :
      return template.replace("{code}", structured_context)
 
 
-def call_ai(prompt: str)-> str:
-     result = subprocess.run(
-          [r"C:\Users\91968\AppData\Local\Programs\Ollama\ollama.exe", "run", "deepseek-coder:6.7b"],  
+def call_ai(prompt: str) -> str:
+    """
+    Call Ollama model safely using absolute path.
+    """
 
-          input=prompt,
-          text= True, #Without this, Python would return raw byte data.
-          capture_output=True,
-          encoding="utf-8" #Decode output using UTF-8 without this system will suffer from a bug
-            )
+    # HARD-SET absolute path (this is correct on your system)
+    ollama_path = r"C:\Users\91968\AppData\Local\Programs\Ollama\ollama.exe"
+
+    # Step 1: Verify executable exists
+    if not os.path.isfile(ollama_path):
+        print("CRITICAL ERROR: Ollama executable not found at:")
+        print(ollama_path)
+        return ""
+
+    try:
+
+        # Step 2: Run Ollama model
+        result = subprocess.run(
+            [ollama_path, "run", "deepseek-coder:6.7b"],
+            input=prompt,
+            text=True,
+            capture_output=True,
+            encoding="utf-8",
+            timeout=120
+        )
+
+        # Step 3: Debug info
+        print("DEBUG return code:", result.returncode)
+        print("DEBUG stderr:", result.stderr)
+
+        # Step 4: Check failure
+        if result.returncode != 0:
+            print("ERROR: Ollama execution failed")
+            return ""
+
+        # Step 5: Return clean output
+        return result.stdout.strip()
+
+    except Exception as e:
+        print("CRITICAL ERROR:", str(e))
+        return ""
      
-     return result.stdout.strip() 
 
 
      
@@ -129,7 +162,7 @@ def main():
                                 max_attempts=4
                                 )
           if fixed_code is None:
-               print("Failed to generate valid after multiple attempts")
+               print(" NO error found or Failed to generate valid after multiple attempts")
                return
           apply_fix(args.file, fixed_code)
 
