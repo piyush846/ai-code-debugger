@@ -1,5 +1,10 @@
 # aidbg — AI Code Debugger
 
+AI-powered local code debugger using Ollama and DeepSeek
+
+PyPI: https://pypi.org/project/aidbg-cli/
+GitHub: https://github.com/piyush846/ai-code-debugger
+
 Multi-language AI debugger powered by local LLM (DeepSeek via Ollama).
 
 ## Features
