@@ -10,8 +10,8 @@ agent/fixer.py
 agent/language_detector.py
 agent/retry.py
 agent/validator.py
-aidbg.egg-info/PKG-INFO
-aidbg.egg-info/SOURCES.txt
-aidbg.egg-info/dependency_links.txt
-aidbg.egg-info/entry_points.txt
-aidbg.egg-info/top_level.txt
+aidbg_cli.egg-info/PKG-INFO
+aidbg_cli.egg-info/SOURCES.txt
+aidbg_cli.egg-info/dependency_links.txt
+aidbg_cli.egg-info/entry_points.txt
+aidbg_cli.egg-info/top_level.txt

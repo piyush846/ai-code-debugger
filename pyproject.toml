@@ -3,17 +3,29 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "aidbg"
+name = "aidbg-cli"
 version = "0.1.0"
-description = "AI Code Debugger using local LLM"
+description = "Multi-language AI code debugger using local LLM"
 authors = [
-    { name = "Piyush Maheshwari" }
+    { name = "Piyush Maheshwari", email = "maheshwaripiyush846@gmail.com" }
 ]
+readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "MIT" }
+
+keywords = ["AI", "debugger", "code", "LLM", "developer-tools"]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
 
 [tool.setuptools]
 packages = ["agent"]
 py-modules = ["aidbg"]
+
+[tool.setuptools.package-data]
+"*" = ["*.txt"]
 
 [project.scripts]
 aidbg = "aidbg:main"

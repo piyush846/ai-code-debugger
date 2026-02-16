@@ -1,5 +1,5 @@
 Metadata-Version: 2.4
-Name: aidbg
+Name: aidbg-cli
 Version: 0.1.0
 Summary: Multi-language AI code debugger using local LLM
 Author-email: Piyush Maheshwari <maheshwaripiyush846@gmail.com>
