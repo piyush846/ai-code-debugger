@@ -1,0 +1,8 @@
+#include<iostream>
+using namespace std;
+
+int main()
+ a = 9
+ b =6
+ return a + b;
+ 

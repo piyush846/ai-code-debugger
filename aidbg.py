@@ -11,6 +11,7 @@ from agent.extractor import extract_fixed_code
 from agent.retry import retry_fix
 from agent.ai_client import call_ai
 from agent.fixer import apply_fix
+from agent.compiler_validator import validate_code
 
 def get_arguments():
     parser =argparse.ArgumentParser(
@@ -69,6 +70,7 @@ def build_prompt(code: str, language: str, error_type: str)-> str :
 def main():
      args=get_arguments()
      code = read_code(args)
+     print(f"File being processed : {args.file}")
      language = detect_language(code, args.file)
      error_type = classify_error(code)
 
@@ -96,8 +98,15 @@ def main():
           if fixed_code is None:
                print(" NO error found or Failed to generate valid after multiple attempts")
                return
-          apply_fix(args.file, fixed_code)
 
+          is_valid = validate_code(fixed_code,language)
+
+          if not is_valid:
+               print("fix failed compiler validatioin")
+               print("Original file preserved")
+               return
+          apply_fix(args.file, fixed_code)
+          
           print("Syntax validation passed. Fix applied successfully")
 if __name__=="__main__":
      main()

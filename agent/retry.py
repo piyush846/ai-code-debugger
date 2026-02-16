@@ -1,4 +1,4 @@
-from agent.validator import validate_python_syntax
+from agent.compiler_validator import validate_code
 from agent.extractor import extract_fixed_code
 
 def retry_fix(call_ai, build_prompt, code, language,error_type,filename ,max_attempts=4):
@@ -19,12 +19,12 @@ def retry_fix(call_ai, build_prompt, code, language,error_type,filename ,max_att
             print("Could not extract fix from AI response")
             attempt += 1
             continue #skip ramaining steps go to next attempt
-        valid, error = validate_python_syntax(fixed_code,filename)
+        valid = validate_code(fixed_code,language)
 
         if valid:
             print("valid fix found")
             return fixed_code
-        print(f"Invalid fix:{error}")
+        print("Invalid fix: compiler validtion failed")
 
         code =fixed_code # It upadates input code for next attempt Instead of retrying original broken code, agent retries improved version.
 
