@@ -1,2 +1,3 @@
 [console_scripts]
-aidbg = aidbg:main
+aidbg = aidbg.cli:main
+aidbg-mcp = aidbg.mcp.server:main

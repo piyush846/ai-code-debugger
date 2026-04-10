@@ -1,28 +1,6 @@
 Metadata-Version: 2.4
 Name: aidbg-cli
-Version: 0.1.0
-Summary: Multi-language AI code debugger using local LLM
-Author-email: Piyush Maheshwari <maheshwaripiyush846@gmail.com>
-License: MIT
-Keywords: AI,debugger,code,LLM,developer-tools
-Classifier: Programming Language :: Python :: 3
-Classifier: Operating System :: OS Independent
+Version: 0.3.0
+Summary: AI-powered local code debugger with multi-agent architecture and MCP support
 Requires-Python: >=3.10
-Description-Content-Type: text/markdown
-
-# aidbg — AI Code Debugger
-
-Multi-language AI debugger powered by local LLM (DeepSeek via Ollama).
-
-## Features
-
-- Fix Python, C, C++, Java, JavaScript
-- Compiler-level validation
-- Safe fix with automatic backup
-- VS Code integration
-- Works offline
-
-## Install
-
-```bash
-pip install aidbg
+Requires-Dist: mcp

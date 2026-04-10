@@ -55,16 +55,12 @@ def  read_code(args):
     
         
 
-def build_prompt(code: str, language: str, error_type: str)-> str :
-     template = Path("prompts/debugger.txt").read_text(encoding="utf-8")
-     structured_context = f"""
-     Detected Language: {language}
-     Pre-analysis Result: {error_type}
-
-     CODE:
-     {code}
-     """
-     return template.replace("{code}", structured_context)
+def build_prompt(code: str, language: str, error_type: str) -> str:
+    template = Path("prompts/debugger.txt").read_text(encoding="utf-8")
+    return (template
+            .replace("{code}", code)
+            .replace("{language}", language)
+            .replace("{error_type}", error_type))
 
 
 def main():

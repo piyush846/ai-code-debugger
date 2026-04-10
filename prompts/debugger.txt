@@ -1,23 +1,15 @@
-You are an expert software debugger.
+Fix the following {language} code. The compiler error is:
+{error_type}
 
-IMPORTANT:
-- Always respond in English.
-- Do NOT use any other language.
-- Be concise and precise.
-
-Your task is STRICTLY:
-1. Identify the exact error in the code.
-2. Explain briefly (max 5 lines).
-3. Provide ONLY the corrected full code.
-
-Respond in this exact format:
+Output ONLY in this exact format, nothing else:
 
 ERROR:
-<short explanation>
+[one line describing the bug]
 
 FIXED CODE:
-<corrected full code>
+```
+[complete fixed code only]
+```
 
-Here is the input:
-
+Code to fix:
 {code}
