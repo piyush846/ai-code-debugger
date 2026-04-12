@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   ollama:
     image: ollama/ollama:latest
@@ -11,7 +9,7 @@ services:
     restart: unless-stopped
 
   aidbg:
-    build: .
+    image: piyush846/aidbg:latest
     container_name: aidbg-app
     environment:
       - AIDBG_MODEL=qwen2.5-coder:3b

@@ -1,14 +1,41 @@
 def is_safe(board, row, col, n):
-    # Check if the current cell is safe to place a queen
-    for i in range(col):
-        if board[row][i] == 1:
+    # Check if there is a queen in the same column
+    for i in range(row):
+        if board[i][col] == 1:
             return False
-    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+
+    # Check upper-left diagonal
+    i, j = row - 1, col - 1
+    while i >= 0 and j >= 0:
         if board[i][j] == 1:
             return False
-    for i, j in zip(range(row, n, 1), range(col, -1, -1)):
+        i -= 1
+        j -= 1
+
+    # Check lower-left diagonal
+    i, j = row + 1, col - 1
+    while i < n and j >= 0:
         if board[i][j] == 1:
             return False
+        i += 1
+        j -= 1
+
+    # Check upper-right diagonal
+    i, j = row - 1, col + 1
+    while i >= 0 and j < n:
+        if board[i][j] == 1:
+            return False
+        i -= 1
+        j += 1
+
+    # Check lower-right diagonal
+    i, j = row + 1, col + 1
+    while i < n and j < n:
+        if board[i][j] == 1:
+            return False
+        i += 1
+        j += 1
+
     return True
 
 def solve(board, col, n):
@@ -19,8 +46,8 @@ def solve(board, col, n):
             board[i][col] = 1
             if solve(board, col + 1, n):
                 return True
-            # Fixed: Add backtrack by setting the current cell to zero
             board[i][col] = 0
+
     return False
 
 def print_board(board, n):
