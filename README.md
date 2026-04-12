@@ -119,7 +119,7 @@ Press one key on any open file and aidbg fixes it automatically.
     "key": "ctrl+b",
     "command": "workbench.action.terminal.sendSequence",
     "args": {
-      "text": "docker-compose -f C:\\path\\to\\docker-compose.yml run --rm aidbg python -m aidbg.cli /app/workspace/${fileBasename} --fix\n"
+      "text": "docker-compose -f C:\\path\\to\\docker-compose.yml run --rm -v \"${fileDirname}:/app/workspace\" aidbg python -m aidbg.cli /app/workspace/${fileBasename} --fix\n"
     }
   }
 ]
@@ -139,7 +139,7 @@ Replace `C:\\path\\to\\docker-compose.yml` with the actual path to your `docker-
 |-------|-------|
 | Name | aidbg |
 | Program | docker-compose |
-| Arguments | `-f C:\path\to\docker-compose.yml run --rm aidbg python -m aidbg.cli /app/workspace/$FileName$ --fix` |
+| Arguments | `-f C:\path\to\docker-compose.yml run --rm -v "$FileDir$:/app/workspace" aidbg python -m aidbg.cli /app/workspace/$FileName$ --fix` |
 | Working directory | `$ProjectFileDir$` |
 
 **Step 2** — `File → Settings → Keymap` → search `External Tools` → find `aidbg` → right click → `Add Keyboard Shortcut` → press `Ctrl+B`
