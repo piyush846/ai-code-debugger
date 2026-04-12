@@ -1,0 +1,40 @@
+def is_safe(board, row, col, n):
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+    i, j = row, col
+    while i >= 0 and j >= 0:
+        if board[i][j] == 1:
+            return False
+        i -= 1
+        j -= 1
+    i, j = row, col
+    while i < n and j >= 0:
+        if board[i][j] == 1:
+            return False
+        i += 1
+        j -= 1
+    return True
+
+def solve(board, col, n):
+    if col == n:
+        return True
+    for i in range(n):
+        if is_safe(board, i, col, n):
+            board[i][col] = 1
+            if solve(board, col + 1, n):
+                return True
+            # BACKTRACKING STEP: reset the chosen square before trying the next row
+            board[i][col] = 0
+    return False
+
+def print_board(board, n):
+    for i in range(n):
+        print(" ".join(str(board[i][j]) for j in range(n)))
+
+n = 4
+board = [[0] * n for _ in range(n)]
+if solve(board, 0, n):
+    print_board(board, n)
+else:
+    print("No solution")
