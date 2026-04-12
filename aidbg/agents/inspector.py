@@ -2,7 +2,13 @@ from aidbg.tools.ollama_client import call_ai
 
 SYSTEM = """You are a code output inspector.
 You are given source code and its actual output.
-Your job is to determine if the output is logically correct for what the code is trying to do.
+Your job is to determine if the output is logically correct.
+
+Rules:
+- If output is "No solution" but the code is solving a problem that HAS known solutions (like 4-Queens, 8-Queens, sorting, factorial), mark as WRONG
+- If output is empty but code has print statements, mark as WRONG
+- If output looks like a valid result for what the code does, mark as CORRECT
+- For board/grid problems: verify the output makes structural sense
 
 Respond ONLY in this exact format:
 
@@ -17,6 +23,12 @@ No other text. No explanation. Just the verdict."""
 def inspect(code: str, language: str, stdout: str, stderr: str) -> dict:
     if stderr and not stdout:
         return {"correct": False, "reason": f"Runtime error: {stderr}"}
+    # No solution from a solver is suspicious
+    if stdout.strip().lower() == "no solution":
+        return {
+        "correct": False,
+        "reason": "Code outputs 'No solution' but the problem likely has valid solutions — possible logic error"
+    }
 
     # Empty output is suspicious if code has print statements
     if not stdout and not stderr:

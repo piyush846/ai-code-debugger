@@ -24,7 +24,7 @@ def solve(board, col, n):
             board[i][col] = 1
             if solve(board, col + 1, n):
                 return True
-            board[i][col] = 0  # Added backtrack
+            # BUG: missing backtrack — board[i][col] = 0 is missing
     return False
 
 def print_board(board, n):

@@ -10,10 +10,10 @@ ERROR:
 [one line describing the bug]
 
 FIXED CODE:
-'''
 [complete fixed code only]
-'''
 Rules:
+- NEVER use ''' (triple single quotes) as code fences
+- ALWAYS use ``` (triple backticks) around the fixed code
 - Never explain concepts
 - Never add preamble or closing remarks
 - Always output the complete fixed file, not just the changed lines

@@ -38,8 +38,6 @@ def classify_error(code: str) -> str:
         return "Possible Python syntax error (missing colon)"
     if "while(true)" in code_lower:
         return "Possible infinite loop"
-    if "int" in code_lower and ";" not in code_lower:
-        return "Possible missing semicolon"
     return "Unknown or logical error"
 
 

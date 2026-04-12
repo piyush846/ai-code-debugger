@@ -89,12 +89,13 @@ def debug(filepath: str, max_attempts: int = 4) -> dict:
         last_issue = (
             f"Logical error: {inspection['reason']}\n"
             f"Actual output: {result.stdout}"
-        )
+)
 
         fixed_code = fix(
-            code, language, error_type,
-            stderr=f"Logic error: {inspection['reason']}\nActual output was: {result.stdout}"
-        )
+            code, language,
+            error_type=inspection['reason'],   # pass inspector reason as error_type
+            stderr=f"Actual output was: {result.stdout}\nExpected: a valid solution, not 'No solution'"
+)
         if fixed_code:
             code = fixed_code
 
